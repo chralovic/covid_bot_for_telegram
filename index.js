@@ -1,8 +1,6 @@
 require('dotenv').config();
 const Markup = require('telegraf/markup');
-const {
-	Telegraf
-} = require('telegraf');
+const { Telegraf } = require('telegraf');
 const mogilev = require('./statistics/mogilev');
 const gomel = require('./statistics/gomel');
 const grodno = require('./statistics/grodno');
@@ -16,17 +14,20 @@ bot.start((ctx) =>
 	ctx.reply(
 		`
 Привет, ${ctx.message.from.first_name}!
-Узнай последнюю статистику по коронавирусу в Беларуси. Выбери область, и мы покажем количество случаев по районам этой области. Если у тебя есть информация о новых случаях, напиши нам @InfiekcionkaBot.
+Узнай последнюю статистику по коронавирусу в Беларуси. 
+Выбери область, и мы покажем количество случаев по районам этой области. 
+
+Если у тебя есть информация о новых случаях, напиши нам — @InfiekcionkaBot.
 
 `,
 		Markup.keyboard([
-			['Минск'],
-			['Минская', 'Витебская'],
-			['Могилёвская', 'Гомельская'],
-			['Брестская', 'Гродненская']
+			[ 'Статистика Минздрава' ],
+			[ 'Минская', 'Витебская' ],
+			[ 'Могилёвская', 'Гомельская' ],
+			[ 'Брестская', 'Гродненская' ]
 		])
-		.resize()
-		.extra()
+			.resize()
+			.extra()
 	)
 );
 
@@ -37,6 +38,13 @@ bot.hears('Гомельская', (ctx) => ctx.reply(gomel));
 bot.hears('Гродненская', (ctx) => ctx.reply(grodno));
 bot.hears('Брестская', (ctx) => ctx.reply(brest));
 bot.hears('Витебская', (ctx) => ctx.reply(vitebsk));
-bot.hears('Минск', (ctx) => ctx.reply(minsk));
+bot.hears('Статистика Минздрава', (ctx) => ctx.reply(minsk));
+
+bot.catch((err, ctx) => {
+	console.log(`Упс! Произошла ошибка ${ctx.updateType}`, err);
+});
+bot.start((ctx) => {
+	throw new Error('Example error');
+});
 
 bot.launch();
